@@ -59,21 +59,23 @@
   // Hero image
   if (recipe.image_url) {
     try {
+      const resp = await fetch(recipe.image_url);
+      const blob = await resp.blob();
+      const blobUrl = URL.createObjectURL(blob);
       const img = new Image();
-      img.crossOrigin = 'anonymous';
-      await new Promise((resolve) => {
+      await new Promise((resolve, reject) => {
         img.onload = resolve;
-        img.onerror = resolve;
-        img.src = recipe.image_url;
+        img.onerror = reject;
+        img.src = blobUrl;
       });
+      const naturalW = img.naturalWidth;
+      const naturalH = img.naturalHeight;
       const canvas = document.createElement('canvas');
-      const naturalW = img.naturalWidth || 600;
-      const naturalH = img.naturalHeight || 400;
       canvas.width = naturalW;
       canvas.height = naturalH;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
+      canvas.getContext('2d').drawImage(img, 0, 0);
       const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      URL.revokeObjectURL(blobUrl);
       const imgW = col;
       const imgH = Math.min(imgW * (naturalH / naturalW), 80);
       doc.addImage(dataUrl, 'JPEG', margin, y, imgW, imgH);
