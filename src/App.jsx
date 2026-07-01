@@ -53,6 +53,7 @@ export default function App() {
         .from('recipes').select('*')
         .eq('status', 'published')
         .order('created_at', { ascending: false })
+      console.log('fetchRecipes result:', { data, error })
       if (error) console.error('Supabase error:', error.message, error.code, error.details)
       setRecipes(data || [])
     } catch (err) {
