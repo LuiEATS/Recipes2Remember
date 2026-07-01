@@ -1,4 +1,4 @@
-﻿export async function generateShoppingListPDF(selected, orderedCats, grouped, formatDisplay) {
+﻿export async function generateShoppingListPDF(selected, orderedCats, grouped, formatDisplay, checked = {}) {
   if (!window.jspdf) throw new Error('jsPDF not loaded');
   const { jsPDF } = window.jspdf;
 
@@ -97,7 +97,7 @@
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
     doc.setTextColor(255, 255, 255);
-    doc.text(cat.icon + '  ' + cat.label.toUpperCase() + '  (' + items.length + ')', margin + 4, y + 5.5);
+    doc.text(cat.label.toUpperCase() + '  (' + items.length + ')', margin + 4, y + 5.5);
     y += 10;
 
     // Items in 2 columns
@@ -112,21 +112,41 @@
       addPageIfNeeded(10);
 
       // Checkbox
+      const isChecked = !!checked[item.name.toLowerCase()];
       doc.setDrawColor(cr, cg, cb);
       doc.setLineWidth(0.5);
-      doc.rect(startX, rowY, 4, 4);
+      if (isChecked) {
+        doc.setFillColor(cr, cg, cb);
+        doc.rect(startX, rowY, 4, 4, 'FD');
+        doc.setDrawColor(255, 255, 255);
+        doc.setLineWidth(0.7);
+        doc.line(startX + 0.8, rowY + 2.2, startX + 1.8, rowY + 3.2);
+        doc.line(startX + 1.8, rowY + 3.2, startX + 3.4, rowY + 1.0);
+        doc.setDrawColor(cr, cg, cb);
+        doc.setLineWidth(0.5);
+      } else {
+        doc.rect(startX, rowY, 4, 4);
+      }
 
-      // Amount
+      // Amount + Name (strike through if checked)
       const display = formatDisplay(item);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont('helvetica', isChecked ? 'normal' : 'bold');
       doc.setFontSize(8);
-      doc.setTextColor(cr, cg, cb);
+      doc.setTextColor(isChecked ? 180 : cr, isChecked ? 180 : cg, isChecked ? 180 : cb);
       doc.text(display, startX + 6, rowY + 3.5);
 
-      // Name
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...INK);
-      doc.text(item.name, startX + 6 + doc.getTextWidth(display) + 2, rowY + 3.5);
+      doc.setTextColor(isChecked ? 180 : INK[0], isChecked ? 180 : INK[1], isChecked ? 180 : INK[2]);
+      const nameX = startX + 6 + doc.getTextWidth(display) + 2;
+      doc.text(item.name, nameX, rowY + 3.5);
+
+      // Strikethrough line if checked
+      if (isChecked) {
+        const lineY = rowY + 2.2;
+        doc.setDrawColor(150, 150, 150);
+        doc.setLineWidth(0.4);
+        doc.line(startX + 6, lineY, nameX + doc.getTextWidth(item.name), lineY);
+      }
     });
 
     y += Math.ceil(items.length / 2) * 9 + 6;

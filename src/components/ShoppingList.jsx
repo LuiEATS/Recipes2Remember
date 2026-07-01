@@ -113,7 +113,7 @@ export default function ShoppingList({ selectedIds, recipes, onClose }) {
   async function handlePDF() {
     setPdfLoading(true)
     try {
-      await generateShoppingListPDF(selected, orderedCats, grouped, formatDisplay)
+      await generateShoppingListPDF(selected, orderedCats, grouped, formatDisplay, checked)
     } catch (err) {
       console.error(err)
     } finally {
