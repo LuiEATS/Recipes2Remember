@@ -48,12 +48,18 @@ export default function App() {
 
   async function fetchRecipes() {
     setLoading(true)
-    const { data } = await supabase
-      .from('recipes').select('*')
-      .eq('status', 'published')
-      .order('created_at', { ascending: false })
-    setRecipes(data || [])
-    setLoading(false)
+    try {
+      const { data, error } = await supabase
+        .from('recipes').select('*')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+      if (error) console.error('Supabase error:', error)
+      setRecipes(data || [])
+    } catch (err) {
+      console.error('Fetch failed:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function fetchUserLikes(userId) {
