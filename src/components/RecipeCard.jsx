@@ -3,7 +3,7 @@ import { formatAmount } from '../lib/units.js'
 
 export default function RecipeCard({
   recipe, onOpen, onLike, onFavorite, onSelect, selected,
-  isLiked, isFavorited, onPDF, pdfLoading
+  isLiked, isFavorited, onPDF, pdfLoading, onTagClick
 }) {
   return (
     <div className={`recipe-card ${selected ? 'selected' : ''}`}>
@@ -16,7 +16,7 @@ export default function RecipeCard({
         {recipe.tags && recipe.tags.length > 0 && (
           <div className="card-tags">
             {recipe.tags.slice(0, 2).map(t => (
-              <TagBadge key={t} tag={t} />
+              <TagBadge key={t} tag={t} onClick={e => { e.stopPropagation(); onTagClick && onTagClick(t) }} />
             ))}
           </div>
         )}

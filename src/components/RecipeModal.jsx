@@ -4,7 +4,7 @@ import { formatAmount } from '../lib/units.js'
 
 export default function RecipeModal({
   recipe, onClose, onLike, onFavorite, onPDF, pdfLoading,
-  isLiked, isFavorited
+  isLiked, isFavorited, onTagClick
 }) {
   const [tab, setTab] = useState('ingredients')
 
@@ -31,7 +31,7 @@ export default function RecipeModal({
 
           {recipe.tags && recipe.tags.length > 0 && (
             <div className="modal-tags">
-              {recipe.tags.map(t => <TagBadge key={t} tag={t} />)}
+              {recipe.tags.map(t => <TagBadge key={t} tag={t} onClick={() => { onTagClick && onTagClick(t); onClose() }} />)}
             </div>
           )}
 

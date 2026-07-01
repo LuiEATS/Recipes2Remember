@@ -283,6 +283,7 @@ export default function App() {
                 isFavorited={userFavorites.includes(r.id)}
                 onPDF={handlePDF}
                 pdfLoading={pdfLoading}
+                onTagClick={t => setActiveTag(activeTag === t ? null : t)}
               />
             ))}
           </div>
@@ -314,6 +315,7 @@ export default function App() {
           pdfLoading={pdfLoading}
           isLiked={userLikes.includes(openRecipe.id)}
           isFavorited={userFavorites.includes(openRecipe.id)}
+          onTagClick={t => { setActiveTag(t); setOpenRecipe(null) }}
         />
       )}
 
