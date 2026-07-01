@@ -56,35 +56,6 @@
 
   addHeader();
 
-  // Hero image
-  if (recipe.image_url) {
-    try {
-      const resp = await fetch(recipe.image_url);
-      const blob = await resp.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const img = new Image();
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = blobUrl;
-      });
-      const naturalW = img.naturalWidth;
-      const naturalH = img.naturalHeight;
-      const canvas = document.createElement('canvas');
-      canvas.width = naturalW;
-      canvas.height = naturalH;
-      canvas.getContext('2d').drawImage(img, 0, 0);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-      URL.revokeObjectURL(blobUrl);
-      const imgW = col;
-      const imgH = Math.min(imgW * (naturalH / naturalW), 80);
-      doc.addImage(dataUrl, 'JPEG', margin, y, imgW, imgH);
-      y += imgH + 4;
-    } catch (e) {
-      // skip image on error
-    }
-  }
-
   // Title block
   y += 4;
   doc.setFillColor(...CREAM);
