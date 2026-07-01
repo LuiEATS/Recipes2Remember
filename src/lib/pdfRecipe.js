@@ -67,13 +67,17 @@
         img.src = recipe.image_url;
       });
       const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth || 600;
-      canvas.height = img.naturalHeight || 400;
+      const naturalW = img.naturalWidth || 600;
+      const naturalH = img.naturalHeight || 400;
+      canvas.width = naturalW;
+      canvas.height = naturalH;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
       const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-      doc.addImage(dataUrl, 'JPEG', 0, y, W, 58);
-      y += 58;
+      const imgW = col;
+      const imgH = Math.min(imgW * (naturalH / naturalW), 80);
+      doc.addImage(dataUrl, 'JPEG', margin, y, imgW, imgH);
+      y += imgH + 4;
     } catch (e) {
       // skip image on error
     }
