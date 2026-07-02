@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://recipes2remember.com/sitemap.xml
