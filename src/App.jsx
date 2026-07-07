@@ -29,6 +29,7 @@ export default function App() {
   const [userFavorites, setUserFavorites] = useState([])
   const [loading, setLoading]         = useState(true)
   const [pendingSubmit, setPendingSubmit] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -171,31 +172,37 @@ export default function App() {
             <div className="logo-main">Recipes<span>2</span>Remember</div>
             <div className="logo-sub">Est. in Every Kitchen · Passed Down with Love</div>
           </div>
-          <nav className="header-nav">
-            <button className={`nav-btn ${view === 'home' ? 'active' : ''}`} onClick={() => setView('home')}>
+          <button
+            className="hamburger"
+            onClick={() => setMenuOpen(o => !o)}
+            aria-label="Menu"
+          >
+            <span /><span /><span />
+          </button>
+          <nav className={`header-nav ${menuOpen ? 'nav-open' : ''}`}>
+            <button className={`nav-btn ${view === 'home' ? 'active' : ''}`} onClick={() => { setView('home'); setMenuOpen(false) }}>
               All Recipes
             </button>
             <button className={`nav-btn ${view === 'favorites' ? 'active' : ''}`} onClick={() => {
               if (!user) { setShowAuth(true) } else setView('favorites')
+              setMenuOpen(false)
             }}>
               ★ Saved
             </button>
             {selectedIds.length > 0 && (
-              <button className="nav-btn active" onClick={() => setShowShopping(true)}>
+              <button className="nav-btn active" onClick={() => { setShowShopping(true); setMenuOpen(false) }}>
                 🛒 List ({selectedIds.length})
               </button>
             )}
-            <button className="nav-btn cta" onClick={handleAddRecipe}>+ Add Recipe</button>
+            <button className="nav-btn cta" onClick={() => { handleAddRecipe(); setMenuOpen(false) }}>+ Add Recipe</button>
             {!user
-              ? <button className="nav-btn" onClick={() => setShowAuth(true)}>Sign In</button>
+              ? <button className="nav-btn" onClick={() => { setShowAuth(true); setMenuOpen(false) }}>Sign In</button>
               : <>
-                  <span style={{color:'rgba(245,240,232,0.6)',fontSize:11,alignSelf:'center',maxWidth:140,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
-                    {user.email}
-                  </span>
-                  <button className="nav-btn" onClick={handleSignOut}>Sign Out</button>
+                  <span className="nav-email">{user.email}</span>
+                  <button className="nav-btn" onClick={() => { handleSignOut(); setMenuOpen(false) }}>Sign Out</button>
                 </>
             }
-            <button className="nav-btn" onClick={() => setShowAdmin(true)}>⚙ Admin</button>
+            <button className="nav-btn" onClick={() => { setShowAdmin(true); setMenuOpen(false) }}>⚙ Admin</button>
           </nav>
         </div>
       </header>

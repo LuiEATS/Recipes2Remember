@@ -1251,15 +1251,113 @@ select.form-input { cursor: pointer; }
   border: 1px solid var(--red);
 }
 
+/* ── HAMBURGER ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 3px;
+  padding: 8px 10px;
+  cursor: pointer;
+  margin-left: auto;
+}
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--cream);
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.hamburger:hover { border-color: var(--cream); }
+
+.nav-email {
+  color: rgba(245,240,232,0.6);
+  font-size: 11px;
+  align-self: center;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ── RESPONSIVE ── */
-@media (max-width: 600px) {
-  .site-header { padding: 0 14px; }
-  .cards-grid { padding: 10px 14px 60px; gap: 14px; }
-  .hero { padding: 32px 14px 28px; }
+@media (max-width: 768px) {
+  /* Header */
+  .site-header { padding: 0 16px; }
+  .header-inner { flex-wrap: nowrap; padding: 12px 0; gap: 0; }
+  .hamburger { display: flex; }
+
+  /* Nav becomes full-width dropdown */
+  .header-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--denim);
+    border-top: 2px solid var(--red);
+    flex-direction: column;
+    padding: 12px 16px 16px;
+    gap: 8px;
+    z-index: 99;
+    box-shadow: 0 8px 24px rgba(26,22,18,0.3);
+  }
+  .header-nav.nav-open { display: flex; }
+  .nav-btn { text-align: left; width: 100%; padding: 12px 14px; font-size: 13px; }
+  .nav-email { max-width: 100%; padding: 4px 14px; }
+
+  /* Cards */
+  .cards-grid {
+    grid-template-columns: 1fr;
+    padding: 10px 14px 80px;
+    gap: 14px;
+  }
+
+  /* Hero */
+  .hero { padding: 32px 16px 28px; }
+  .hero-subtitle { font-size: 15px; }
+  .search-bar { max-width: 100%; }
+
+  /* Tags */
+  .tags-section { padding: 10px 14px; }
+
+  /* Section header */
+  .section-header { padding: 16px 14px 6px; }
+
+  /* Modals */
+  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal-box {
+    border-radius: var(--radius) var(--radius) 0 0;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .modal-hero { height: 180px; }
+  .modal-content { padding: 18px 16px 24px; }
+  .modal-title { font-size: 22px; }
+
+  /* Shopping modal full height */
+  .shopping-modal { max-height: 92vh; }
+
+  /* Nutrition */
   .nutrition-grid { grid-template-columns: repeat(3, 1fr); }
   .nutrition-form-grid { grid-template-columns: repeat(3, 1fr); }
-  .modal-overlay { padding: 10px 6px; }
-  .modal-content { padding: 18px; }
-  .tags-section { padding: 10px 14px; }
-  .section-header { padding: 18px 14px 6px; }
+
+  /* Shopping bar */
+  .shopping-bar {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    border-radius: 0;
+    border-left: none;
+    border-top: 4px solid var(--red);
+    justify-content: center;
+  }
+
+  /* Banner smaller */
+  .banner-strip { font-size: 9px; letter-spacing: 1px; padding: 5px; }
 }
